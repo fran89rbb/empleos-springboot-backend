@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.franrodriguez.springboot.rest.empleos.app.entity.Categoria;
 import com.franrodriguez.springboot.rest.empleos.app.entity.Vacante;
 import com.franrodriguez.springboot.rest.empleos.app.service.IVacanteService;
 
@@ -61,6 +62,11 @@ public class VacanteController {
 		
 		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping("/categorias")
+	public List<Categoria> listaCAtegorias(){
+		return vacanteService.findAllCategorias();
 	}
 
 }

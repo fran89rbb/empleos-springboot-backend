@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -42,8 +44,9 @@ public class Vacante implements Serializable {
 	@Column(name = "DETALLES", length = 15000)
 	private String detalles;
 
-	@Column(name = "ID_CATEGORIA")
-	private Long idCategoria;
+	@OneToOne
+	@JoinColumn(name = "id_categoria")
+	private Categoria categoria;
 
 	public Long getId() {
 		return id;
@@ -117,12 +120,12 @@ public class Vacante implements Serializable {
 		this.detalles = detalles;
 	}
 
-	public Long getIdCategoria() {
-		return idCategoria;
+	public Categoria getCategoria() {
+		return categoria;
 	}
 
-	public void setIdCategoria(Long idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setCategorias(Categoria categoria) {
+		this.categoria = categoria;
 	}
 
 	/**
