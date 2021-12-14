@@ -68,5 +68,11 @@ public class VacanteController {
 	public List<Categoria> listaCAtegorias(){
 		return vacanteService.findAllCategorias();
 	}
+	
+	@GetMapping("/home/verDetalle/{id}")
+	public Vacante findById(@PathVariable Long id) {
+		return vacanteService.findById(id);
+	}
+	
 
 }

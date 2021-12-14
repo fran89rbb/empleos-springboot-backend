@@ -10,6 +10,8 @@ public interface IVacanteService {
 	public List<Vacante> findByEstatusAndDestacado(String estatus, int destacado);
 	
 	public List<Categoria> findAllCategorias();
+	
+	public Vacante findById(Long id);
 
 
 }
