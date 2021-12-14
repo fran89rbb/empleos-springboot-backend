@@ -3,12 +3,15 @@ package com.franrodriguez.springboot.rest.empleos.app.controller;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,8 +73,25 @@ public class VacanteController {
 	}
 	
 	@GetMapping("/home/verDetalle/{id}")
-	public Vacante findById(@PathVariable Long id) {
-		return vacanteService.findById(id);
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		Vacante vacante = null;
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			vacante = vacanteService.findById(id);
+		}catch (DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if(vacante == null) {
+			response.put("mensaje", "El cliente con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<Vacante>(vacante, HttpStatus.OK);	
 	}
 	
 
