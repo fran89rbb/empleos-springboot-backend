@@ -16,9 +16,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.franrodriguez.springboot.rest.empleos.app.entity.Categoria;
@@ -94,5 +99,37 @@ public class VacanteController {
 		return new ResponseEntity<Vacante>(vacante, HttpStatus.OK);	
 	}
 	
+	@GetMapping("/vacantes")
+	public List<Vacante> vacantes(){
+		return vacanteService.findAll();
+	}
+	
+	@PostMapping("/vacantes")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Vacante save(@RequestBody Vacante vacante) {
+		return vacanteService.save(vacante);
+	}
+	
+	@PutMapping("/vacantes/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Vacante update(@PathVariable Long id, @RequestBody Vacante vacante) {
+		Vacante vacanteActual = vacanteService.findById(id);
+		
+		vacanteActual.setNombre(vacante.getNombre());
+		vacanteActual.setDescripcion(vacante.getDescripcion());
+		vacanteActual.setFecha(vacante.getFecha());
+		vacanteActual.setSalario(vacante.getSalario());
+        vacanteActual.setEstatus(vacante.getEstatus());
+		vacanteActual.setDestacado(vacante.getDestacado());
+		vacanteActual.setDetalles(vacante.getDetalles());
+		
+		return vacanteService.save(vacanteActual);
+	}
+	
+	@DeleteMapping("/vacantes/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long id) {
+		vacanteService.delete(id);
+	}
 
 }

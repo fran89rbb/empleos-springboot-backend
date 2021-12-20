@@ -12,6 +12,11 @@ public interface IVacanteService {
 	public List<Categoria> findAllCategorias();
 	
 	public Vacante findById(Long id);
-
+	
+	public List<Vacante> findAll();
+	
+	public Vacante save(Vacante vacante);
+	
+	public void delete(Long id);
 
 }

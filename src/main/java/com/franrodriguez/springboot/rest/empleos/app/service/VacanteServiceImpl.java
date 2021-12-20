@@ -29,8 +29,23 @@ public class VacanteServiceImpl implements IVacanteService {
 
 	@Override
 	public Vacante findById(Long id) {
-		// TODO Auto-generated method stub
 		return vacanteDao.findById(id).orElse(null);
+	}
+
+	@Override
+	public List<Vacante> findAll() {
+		return vacanteDao.findAll();
+	}
+
+	@Override
+	public Vacante save(Vacante vacante) {
+		return vacanteDao.save(vacante);
+	}
+
+	@Override
+	public void delete(Long id) {
+		vacanteDao.deleteById(id);
+		
 	}
 
 }
