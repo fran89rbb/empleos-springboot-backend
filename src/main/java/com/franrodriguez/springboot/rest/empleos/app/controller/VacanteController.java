@@ -92,7 +92,7 @@ public class VacanteController {
 		}
 		
 		if(vacante == null) {
-			response.put("mensaje", "El cliente con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+			response.put("mensaje", "La vacante con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
@@ -106,30 +106,79 @@ public class VacanteController {
 	
 	@PostMapping("/vacantes")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Vacante save(@RequestBody Vacante vacante) {
-		return vacanteService.save(vacante);
+	public ResponseEntity<?> save(@RequestBody Vacante vacante) {
+		Vacante newVacante = null;
+		
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			newVacante = vacanteService.save(vacante);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al realizar el insert en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "La vacante ha sido creado con éxito");
+		response.put("vacante", newVacante);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		
 	}
 	
 	@PutMapping("/vacantes/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Vacante update(@PathVariable Long id, @RequestBody Vacante vacante) {
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Vacante vacante) {
 		Vacante vacanteActual = vacanteService.findById(id);
+		Vacante vacanteUpload = null;
 		
-		vacanteActual.setNombre(vacante.getNombre());
-		vacanteActual.setDescripcion(vacante.getDescripcion());
-		vacanteActual.setFecha(vacante.getFecha());
-		vacanteActual.setSalario(vacante.getSalario());
-        vacanteActual.setEstatus(vacante.getEstatus());
-		vacanteActual.setDestacado(vacante.getDestacado());
-		vacanteActual.setDetalles(vacante.getDetalles());
+		Map<String, Object> response = new HashMap<String, Object>();
 		
-		return vacanteService.save(vacanteActual);
+		if(vacanteActual == null) {
+			response.put("mensaje", "La vacante con ID: ".concat(id.toString().concat(" no existe en la base de datos")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		
+		try {
+			vacanteActual.setNombre(vacante.getNombre());
+			vacanteActual.setDescripcion(vacante.getDescripcion());
+			vacanteActual.setFecha(vacante.getFecha());
+			vacanteActual.setSalario(vacante.getSalario());
+	        vacanteActual.setEstatus(vacante.getEstatus());
+			vacanteActual.setDestacado(vacante.getDestacado());
+			vacanteActual.setDetalles(vacante.getDetalles());
+			vacanteActual.setCategorias(vacante.getCategoria());
+			
+			vacanteService.save(vacanteActual);
+		}catch (DataAccessException e) {
+			response.put("mensaje", "Error al actualizar la vacante en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "La vacante ha sido actualizada con éxito");
+		response.put("vacante", vacanteUpload);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		
 	}
 	
 	@DeleteMapping("/vacantes/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		vacanteService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			vacanteService.delete(id);
+		}catch (DataAccessException e) {
+			response.put("mensaje", "Error al eliminar la vacante en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "La vacante ha sido eliminada con éxito");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+		
 	}
 
 }
