@@ -11,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "vacantes")
@@ -20,30 +24,39 @@ public class Vacante implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotEmpty(message = "no puede esta vacío")
 	@Column(name = "NOMBRE")
 	private String nombre;
 
+	@NotEmpty(message = "no puede esta vacío")
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
 
+	@NotNull(message = "no puede esta vacío")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FECHA")
 	private Date fecha;
 
+	@NotNull(message = "no puede esta vacío")
 	@Column(name = "SALARIO")
 	private Double salario;
 
+	@NotEmpty(message = "no puede esta vacío")
 	@Column(name = "ESTATUS")
 	private String estatus;
 
+	@NotNull(message = "no puede esta vacío")
 	@Column(name = "DESTACADO")
 	private Integer destacado;
 
 	@Column(name = "IMAGEN")
 	private String imagen;
 
+	@NotEmpty(message = "no puede esta vacío")
 	@Column(name = "DETALLES", length = 15000)
 	private String detalles;
 
+	@NotNull(message = "no puede esta vacío")
 	@OneToOne
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
