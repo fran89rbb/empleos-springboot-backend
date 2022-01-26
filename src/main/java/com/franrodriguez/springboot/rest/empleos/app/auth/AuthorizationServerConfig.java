@@ -27,7 +27,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		// TODO Auto-generated method stub
 		security.tokenKeyAccess("permitAll()") //Cualquier usuario puede loguearse
 		.checkTokenAccess("isAuthenticated()"); // Verifica el token y su firma Solo puede acceder los usuarios autenticados
 	}
@@ -37,8 +36,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 * */
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		// TODO Auto-generated method stub
-		clients.inMemory().withClient("angularpp")
+		clients.inMemory().withClient("angularapp")
 		.secret(passwordEncoded.encode("12345"))
 		.scopes("read", "write")
 		.authorizedGrantTypes("password", "refresh_token")
@@ -51,20 +49,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	 * */
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(authenticationManager)
-		.tokenStore(tokenStore())
-		.accessTokenConverter(accessTokenConverter());
+		endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore())
+				.accessTokenConverter(accessTokenConverter());
 	}
-	
+
 	@Bean
 	public JwtTokenStore tokenStore() {
 		// TODO Auto-generated method stub
 		return new JwtTokenStore(accessTokenConverter());
 	}
-	
-	/** 
-	 * Método que se encarga de almanecar datos de autenticación(user, roles...), traducir datos como el token
-	 * */
+
+	/**
+	 * Método que se encarga de almanecar datos de autenticación(user, roles...),
+	 * traducir datos como el token
+	 */
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();

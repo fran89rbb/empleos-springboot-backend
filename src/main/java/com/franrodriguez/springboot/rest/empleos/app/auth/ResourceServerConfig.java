@@ -8,15 +8,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/app/home").permitAll()
-		.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/app/home").permitAll().anyRequest().authenticated();
 	}
-	
-	
 
 }
