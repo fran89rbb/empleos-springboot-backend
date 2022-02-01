@@ -18,7 +18,7 @@ import com.franrodriguez.springboot.rest.empleos.app.dao.IUsuarioDao;
 import com.franrodriguez.springboot.rest.empleos.app.entity.Usuario;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements IUsuarioService, UserDetailsService {
 
 	@Autowired
 	private IUsuarioDao usuarioDao;
@@ -42,6 +42,12 @@ public class UsuarioService implements UserDetailsService {
 		return new User(usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), true, true, true,
 				authorities);
 
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario findByUsername(String username) {
+		return usuarioDao.findByUsername(username);
 	}
 
 }
